@@ -44,8 +44,8 @@ func New() *acMachine {
 	}
 }
 
-// Add 添加模式串
-func (ac *acMachine) Add(pattern string) {
+// add 添加模式串
+func (ac *acMachine) add(pattern string) {
 	p := ac.root
 	tok := newToken(pattern)
 	length := 0
@@ -60,6 +60,18 @@ func (ac *acMachine) Add(pattern string) {
 
 	p.length = length
 	p.isEnd = true
+}
+
+// Add 新增单个词
+func (ac *acMachine) Add(word string) {
+	ac.add(word)
+}
+
+// AddOfList 新增一堆词
+func (ac *acMachine) AddOfList(word []string) {
+	for i := 0; i < len(word); i++ {
+		ac.add(word[i])
+	}
 }
 
 // Build 构建自动机

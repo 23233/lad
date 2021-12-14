@@ -1,4 +1,4 @@
-# 🪜 lad ![lad](https://github.com/usual2970/lad/actions/workflows/go.yml/badge.svg)
+# 🪜 lad ![lad](https://github.com/23233/lad/actions/workflows/go.yml/badge.svg)
 
 一个敏感词过滤包，使用它你可以：
 * 判断文本中是否包含敏感词。
@@ -7,9 +7,12 @@
 
 目前支持中英文，后续打算添加对多音词支持。
 
+## 特点
+* 目前保持0依赖的纯净模式 以后尽量保持
+
 ## 安装
 ```shell script
-go get -u github.com/usual2970/lad  
+go get github.com/23233/lad  
 ```
 
 ## 快速开始
@@ -28,6 +31,19 @@ if err := machine.Load("data path"); err != nil {
     t.Error(err)
 }
 machine.Build()
+```
+
+从文件夹中加载所有数据文件 仅支持`.txt` `.data`后缀的明见 一行一个词组
+```golang
+//go:embed data/*
+var folder embed.FS
+machine := lad.New()
+err := machine.LoadOfFolder(folder)
+if err != nil {
+    t.Fatal(err)
+}
+machine.Build()
+
 ```
 
 匹配字符串
