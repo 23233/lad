@@ -1,12 +1,8 @@
 package lad
 
 import (
-	"bufio"
 	"container/list"
-	"errors"
 	"fmt"
-	"io"
-	"os"
 	"strings"
 )
 
@@ -66,26 +62,6 @@ func (ac *acMachine) Add(pattern string) {
 	p.isEnd = true
 }
 
-// Load 加载文件
-func (ac *acMachine) Load(path string) error {
-	file, err := os.Open(path)
-	if err != nil {
-		return err
-	}
-	defer file.Close()
-	reader := bufio.NewReader(file)
-	for {
-		line, err := reader.ReadString('\n')
-		if err != nil {
-			if errors.Is(err, io.EOF) {
-				return nil
-			}
-			return err
-		}
-		ac.Add(line)
-	}
-}
-
 // Build 构建自动机
 func (ac *acMachine) Build() {
 	l := list.New()
@@ -138,19 +114,6 @@ func (ac *acMachine) Match(text string) bool {
 	})
 	return rs
 }
-
-// Match 匹配
-func (ac *acMachine) Replace(text, target string) string {
-	rs := ""
-	ac.match(text, func(tok *token, node *acNode) {
-		if rs == "" {
-			rs = string(tok.origin)
-		}
-		rs = strings.Replace(rs, tok.prevNStr(tok.index, node.length), target, -1)
-	})
-	return rs
-}
-
 func (ac *acMachine) match(text string, fn func(tok *token, node *acNode)) {
 	p := ac.root
 	tok := newToken(text)
@@ -181,4 +144,16 @@ func (ac *acMachine) match(text string, fn func(tok *token, node *acNode)) {
 			tmp = tmp.fail
 		}
 	}
+}
+
+// Replace 替换
+func (ac *acMachine) Replace(text, target string) string {
+	rs := ""
+	ac.match(text, func(tok *token, node *acNode) {
+		if rs == "" {
+			rs = string(tok.origin)
+		}
+		rs = strings.Replace(rs, tok.prevNStr(tok.index, node.length), target, -1)
+	})
+	return rs
 }
