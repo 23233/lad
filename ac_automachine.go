@@ -33,19 +33,19 @@ func (an *acNode) view() {
 	}
 }
 
-type acMachine struct {
+type AcMachine struct {
 	root *acNode
 }
 
-func New() *acMachine {
+func New() *AcMachine {
 	root := NewAcNode(rootRaw)
-	return &acMachine{
+	return &AcMachine{
 		root: root,
 	}
 }
 
 // add 添加模式串
-func (ac *acMachine) add(pattern string) {
+func (ac *AcMachine) add(pattern string) {
 	p := ac.root
 	tok := newToken(pattern)
 	length := 0
@@ -63,19 +63,19 @@ func (ac *acMachine) add(pattern string) {
 }
 
 // Add 新增单个词
-func (ac *acMachine) Add(word string) {
+func (ac *AcMachine) Add(word string) {
 	ac.add(word)
 }
 
 // AddOfList 新增一堆词
-func (ac *acMachine) AddOfList(word []string) {
+func (ac *AcMachine) AddOfList(word []string) {
 	for i := 0; i < len(word); i++ {
 		ac.add(word[i])
 	}
 }
 
 // Build 构建自动机
-func (ac *acMachine) Build() {
+func (ac *AcMachine) Build() {
 	l := list.New()
 
 	l.PushBack(ac.root)
@@ -109,7 +109,7 @@ func (ac *acMachine) Build() {
 }
 
 // Find 查找
-func (ac *acMachine) Find(text string) []string {
+func (ac *AcMachine) Find(text string) []string {
 	rs := make([]string, 0)
 	ac.match(text, func(tok *token, node *acNode) {
 		rs = append(rs, tok.prevNStr(tok.index, node.length))
@@ -119,14 +119,14 @@ func (ac *acMachine) Find(text string) []string {
 }
 
 // Match 匹配
-func (ac *acMachine) Match(text string) bool {
+func (ac *AcMachine) Match(text string) bool {
 	rs := false
 	ac.match(text, func(tok *token, node *acNode) {
 		rs = true
 	})
 	return rs
 }
-func (ac *acMachine) match(text string, fn func(tok *token, node *acNode)) {
+func (ac *AcMachine) match(text string, fn func(tok *token, node *acNode)) {
 	p := ac.root
 	tok := newToken(text)
 	for {
@@ -159,7 +159,7 @@ func (ac *acMachine) match(text string, fn func(tok *token, node *acNode)) {
 }
 
 // Replace 替换
-func (ac *acMachine) Replace(text, target string) string {
+func (ac *AcMachine) Replace(text, target string) string {
 	rs := ""
 	ac.match(text, func(tok *token, node *acNode) {
 		if rs == "" {

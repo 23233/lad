@@ -23,7 +23,7 @@ var (
 )
 
 // Load 路径加载本地文件
-func (ac *acMachine) Load(path string) error {
+func (ac *AcMachine) Load(path string) error {
 	file, err := os.Open(path)
 	if err != nil {
 		return err
@@ -43,7 +43,7 @@ func (ac *acMachine) Load(path string) error {
 }
 
 // LoadOfFolder 加载文件夹下所有文件
-func (ac *acMachine) LoadOfFolder(folder embed.FS) error {
+func (ac *AcMachine) LoadOfFolder(folder embed.FS) error {
 	err := fs.WalkDir(folder, ".", func(path string, d fs.DirEntry, err error) error {
 		if err != nil {
 			panic(err)
@@ -67,7 +67,7 @@ func (ac *acMachine) LoadOfFolder(folder embed.FS) error {
 	return err
 }
 
-func (ac *acMachine) loadOfByte(file []byte) error {
+func (ac *AcMachine) loadOfByte(file []byte) error {
 	reader := bufio.NewReader(bytes.NewReader(file))
 	for {
 		line, err := reader.ReadString('\n')
@@ -82,7 +82,7 @@ func (ac *acMachine) loadOfByte(file []byte) error {
 }
 
 // LoadRemote 加载远程文件 未验证内容格式是否正确 请自行判断
-func (ac *acMachine) LoadRemote(url string, timeout time.Duration) error {
+func (ac *AcMachine) LoadRemote(url string, timeout time.Duration) error {
 	ctx, _ := context.WithTimeout(context.TODO(), timeout)
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
 	if err != nil {

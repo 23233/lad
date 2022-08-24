@@ -49,6 +49,7 @@ machine.Build()
 匹配字符串
 ```golang
 machine.Match(text)
+// output true or false
 ```
 
 查找字符串
