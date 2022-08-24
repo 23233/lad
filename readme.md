@@ -33,7 +33,7 @@ if err := machine.Load("data path"); err != nil {
 machine.Build()
 ```
 
-从文件夹中加载所有数据文件 仅支持`.txt` `.data`后缀的明见 一行一个词组
+从文件夹中加载所有数据文件 仅支持`.txt` `.data` `.dict`后缀的文件 一行一个词组
 ```golang
 //go:embed data/*
 var folder embed.FS
@@ -85,4 +85,3 @@ BenchmarkAcMachine_Find/find-4         	  322304	      3736 ns/op
 
 <hr>
 
-Released under the [MIT License](LICENSE.txt).  

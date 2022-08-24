@@ -51,13 +51,16 @@ func (ac *acMachine) LoadOfFolder(folder embed.FS) error {
 		if d.IsDir() {
 			return nil
 		}
-		// 仅支持.txt .data后缀名的文件
-		if strings.HasSuffix(d.Name(), ".txt") || strings.HasSuffix(d.Name(), ".data") {
-			b, err := fs.ReadFile(folder, path)
-			if err != nil {
-				return err // or panic or ignore
+		// 仅支持.txt .data .dict后缀名的文件
+		allowSuffix := []string{".txt", ".data", ".dict"}
+		for _, suffix := range allowSuffix {
+			if strings.HasSuffix(d.Name(), suffix) {
+				b, err := fs.ReadFile(folder, path)
+				if err != nil {
+					return err // or panic or ignore
+				}
+				return ac.loadOfByte(b)
 			}
-			return ac.loadOfByte(b)
 		}
 		return nil
 	})
